@@ -755,6 +755,7 @@ export function boardIssue(board: BoardRow[], snapshot: Snapshot): string | null
 
 /** The protocols the board ranks, strongest implied value first, with ranks 1..N. */
 export function buildBoard(snapshot: Snapshot): BoardRow[] {
+  const NOT_A_CANDIDATE = new Set(['cex', 'receipt', 'bridge']);
   const index = bySlug(snapshot.protocols);
   const chosen = new Map<string, SnapshotProtocol>();
   // Every record without a token. The watchlist is a subset of these by construction; adding the
@@ -764,7 +765,16 @@ export function buildBoard(snapshot: Snapshot): BoardRow[] {
     const p = index.get(slug);
     if (p !== undefined) chosen.set(slug, p);
   }
-  for (const p of snapshot.protocols) if (isPreToken(p)) chosen.set(p.slug, p);
+  // Every record without a token that is a launch candidate. A receipt, a bridge or an exchange desk
+  // is not a protocol that may issue its own token: its record carries no token because it wraps or
+  // bridges one that already trades, or because the exchange's own token trades elsewhere. Ranking
+  // them first would put a wrapped asset at the top of a pre-token radar, so they are counted and
+  // shown apart instead — the watchlist already excludes them by the house rule.
+  for (const p of snapshot.protocols) {
+    if (!isPreToken(p)) continue;
+    if (NOT_A_CANDIDATE.has(planKind(p))) continue;
+    chosen.set(p.slug, p);
+  }
 
   const scored = [...chosen.values()].map((p) => ({ p, ...score(p, snapshot.as_of) }));
   scored.sort((a, b) => b.implied - a.implied || b.p.tvl_usd - a.p.tvl_usd || (a.p.slug < b.p.slug ? -1 : a.p.slug > b.p.slug ? 1 : 0));
@@ -827,6 +837,12 @@ export function liveRows(snapshot: Snapshot, cap: number): LiveRow[] {
 }
 
 /** Everything the dashboard renders, from the snapshot. */
+/** How many pre-token records this board leaves out because they are not launch candidates. */
+export function countNotCandidates(snapshot: Snapshot): number {
+  const NOT_A_CANDIDATE = new Set(['cex', 'receipt', 'bridge']);
+  return snapshot.protocols.filter((p) => isPreToken(p) && NOT_A_CANDIDATE.has(planKind(p))).length;
+}
+
 export function buildRadar(snapshot: Snapshot): { board: BoardRow[]; radar: RadarData } {
   const board = buildBoard(snapshot);
   const live = liveRows(snapshot, 40);
@@ -844,6 +860,7 @@ export function buildRadar(snapshot: Snapshot): { board: BoardRow[]; radar: Rada
       board: board.length,
       early: board.filter((r) => !r.on_watchlist).length,
       trading: snapshot.protocols.length - noToken,
+      excluded: countNotCandidates(snapshot),
       no_token: noToken,
       floor_below: board.filter((r) => r.tvl_usd < snapshot.floor_usd).length,
     },
