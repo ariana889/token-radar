@@ -3,12 +3,92 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Token Radar: pre-token protocols ranked by implied value</title>
+<title>Token Radar: protocols with no token, priced against their own TVL</title>
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<a class="skip" href="#board">Skip to the board</a>
-<main id="board" tabindex="-1" aria-busy="true"></main>
+<canvas id="grain" width="1280" height="800" aria-hidden="true"></canvas>
+<div class="frame">
+  <header class="masthead">
+    <div class="mast-title">
+      <p class="kicker">Token radar <span class="sep">/</span> snapshot <span id="as-of">2026-11-14</span> <span class="sep">/</span> <span id="model-version">radar-2</span></p>
+      <h1>Protocols with no token,<br><em>priced against their own books.</em></h1>
+    </div>
+    <div class="mast-side">
+      <p class="model-line" id="model-line"></p>
+      <p class="mast-note" id="mast-note"></p>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="rail" aria-label="Filters">
+      <p class="rail-head">Filters</p>
+      <div class="field">
+        <label for="q">Search</label>
+        <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="name, slug or chain">
+      </div>
+      <div class="field">
+        <span class="label" id="token-label">Token status</span>
+        <div class="seg" id="token-seg" role="group" aria-labelledby="token-label"></div>
+      </div>
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category"></select>
+      </div>
+      <div class="field">
+        <label for="chain">Chain</label>
+        <select id="chain"></select>
+      </div>
+      <div class="field">
+        <label for="floor">TVL floor</label>
+        <select id="floor"></select>
+      </div>
+      <div class="field" id="watch-field">
+        <span class="label">Coverage</span>
+        <button class="toggle" id="watch" type="button" aria-pressed="false">Watchlist only</button>
+      </div>
+      <button class="reset" id="reset" type="button">Reset all filters</button>
+      <div class="legend">
+        <p class="legend-head">The model, in one line</p>
+        <div class="legend-row"><span>base</span><b id="lg-base">0.55</b></div>
+        <div class="legend-row"><span>growth</span><b id="lg-growth">0.75 – 1.35</b></div>
+        <div class="legend-row"><span>age</span><b id="lg-age">0.85 – 1.50</b></div>
+        <div class="legend-row"><span>category</span><b id="lg-cat">0.40 – 1.25</b></div>
+        <p class="legend-note">Growth is the record's seven-day move, clamped to ±40%; age is the months it has been tracked; category is the protocol's own. No name is special-cased.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="statebar">
+        <p class="count" id="count">Loading the board</p>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="panel">
+        <div class="table-wrap">
+          <table>
+          <thead>
+            <tr>
+              <th class="c-rank" scope="col"><button type="button" data-sort="rank">Rank</button></th>
+              <th class="c-name" scope="col"><button type="button" data-sort="name">Protocol</button></th>
+              <th class="c-val" scope="col"><button type="button" data-sort="value" id="val-head">Implied value</button></th>
+              <th class="c-tvl" scope="col"><button type="button" data-sort="tvl">TVL</button></th>
+              <th class="c-chg" scope="col"><button type="button" data-sort="change">7d</button></th>
+              <th class="c-age" scope="col"><button type="button" data-sort="age">Months</button></th>
+              <th class="c-token" scope="col">Token</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        </div>
+      </div>
+      <p class="foot" id="foot"></p>
+    </main>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-labelledby="drawer-title" aria-label="Protocol detail"></aside>
+
 <script src="../data.js"></script>
 <script src="app.js"></script>
 </body>
