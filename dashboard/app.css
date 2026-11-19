@@ -389,7 +389,7 @@ td.age { font: 400 11.5px/1 var(--mono); color: var(--dim); font-variant-numeric
 }
 .d-value .big { font: 400 26px/1 var(--serif); color: var(--accent); letter-spacing: -0.01em; }
 .d-value .mult { font: 400 10px/1.35 var(--mono); color: var(--dim); }
-.d-value .anchor { margin-left: auto; font: 400 9.5px/1.35 var(--mono); color: var(--faint); text-align: right; white-space: pre-line; }
+.d-value .anchor { margin-left: auto; font: 400 9.5px/1.35 var(--mono); color: var(--faint); text-align: right; }
 
 .d-sec { margin-top: 10px; }
 .d-sec h3 {

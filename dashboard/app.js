@@ -369,7 +369,7 @@
     append(drawer, el('div', { class: 'd-value' },
       el('span', { class: 'big', text: fmtUsd(value) }),
       el('span', { class: 'mult', text: trading ? 'market cap' : (mult === null ? '' : fmtMultiple(mult) + ' multiple') }),
-      el('span', { class: 'anchor', text: fmtUsd(r.tvl_usd) + ' TVL' + (trading ? '' : '\n' + fmtUsd(r.tvl_usd * r.factors.base) + ' base') })
+      el('span', { class: 'anchor', text: fmtUsd(r.tvl_usd) + ' TVL' })
     ));
 
     if (trading) {
