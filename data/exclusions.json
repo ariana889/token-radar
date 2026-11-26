@@ -1,0 +1,12 @@
+{
+  "exclusions": [
+    {
+      "name": "Bittensor dTAO",
+      "reason": "Bittensor's native dTAO AMM pools price each subnet's alpha token against TAO; the assets it holds are TAO subnet tokens and TAO already trades."
+    },
+    {
+      "name": "Lightning Network",
+      "reason": "The Lightning Network moves bitcoin; its asset is BTC, which already trades."
+    }
+  ]
+}
