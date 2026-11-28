@@ -73,3 +73,9 @@ The reading that there is no tree size cap for this bounty ("applies": false,
 threshold null) is therefore **provisional, not independently verified**.
 Current tree is small (main.ts ~38 KB, board.json ~1.25 MB, dossier.json
 ~1.26 MB, dashboard ~1.24 MB, data ~4.1 MB).
+
+## Update 2026-11-28 19:55 WIB — SUBMITTED
+- Screenshots done via local chrome-headless-shell (NOT the live browser): board.png, detail.png, filtered.png, all verified at 1440x900.
+- Submitted as 01a22239-f1bb-75be-b5d0-74a6bcba4a50 ("Precise Glyph"), commit 7b9923c on rebuild-public-spec.
+- Kit check 14 passed / 0 failed; server checks ALL pass. The vendor/makefun-board.ts gap did NOT block submission.
+- Result due 2026-12-28T22:10:00Z.

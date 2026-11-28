@@ -61,3 +61,6 @@ browser task allows it.
 - `detail.png` shows a protocol detail panel (not just the board).
 - `filtered.png` shows a filtered board (count line ≠ 696).
 - Then commit them and push (see the parent's submit checklist).
+
+## Done 2026-11-28 19:53 WIB
+Screenshots taken with the local chrome-headless-shell binary (no live browser, no download approval needed): board.png (172,874 B), detail.png (194,428 B), filtered.png (173,058 B) — all verified visually, committed as 7b9923c.
